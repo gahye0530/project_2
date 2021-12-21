@@ -9,8 +9,8 @@ from nltk.corpus import stopwords
 my_stopwords = stopwords.words('english')
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import MultinomialNB, GaussianNB
-from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score
 
 # 구두점과 불용어 제거하는 작업
 def message_cleaning(Text) :
@@ -22,15 +22,34 @@ def message_cleaning(Text) :
 
 def run_checkspam() :
     spam_df = pd.read_csv('data/emails.csv')
-    st.dataframe(spam_df)
-    result = message_cleaning(spam_df.iloc[0,0])
-    # st.write(spam_df.iloc[0,0])
-    st.write(result)
 
     # training
+    # 카운트벡터라이저의 애널라이저 파라미터를 설정해주면 함수를 실행 후 숫자로 변경해준다. 
     vectorizer = CountVectorizer(analyzer=message_cleaning)
     X = vectorizer.fit_transform(spam_df['text'])
     X = X.toarray()
     y = spam_df['spam']
     X_train, X_test, y_train, y_test = train_test_split(X, y)
+    classifier = MultinomialNB()
+    classifier.fit(X_train, y_train)
+    y_pred = classifier.predict(X_test)
+    # 정확도 산출
+    accuracy = accuracy_score(y_test, y_pred)
+    print('정확도 : {}%' .format(round(accuracy,2)))
+
+    st.subheader('Please enter your message')
+    text = st.text_area('', height = 100)
+
+    if (st.button('확인')) & (text != '') :
+        pass
+        # X_sample = vectorizer.transform(text)
+        # X_sample = X_sample.toarray()
+        # print(X_sample.shape)
+
+
+    
+
+
+
+
 
