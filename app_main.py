@@ -1,28 +1,19 @@
 import streamlit as st
 import pandas as pd
-
-def draw_map(map_df) :
-    map_df.rename(columns = {'y' : 'lat', 'x' : 'lon'}, inplace = True)
-    st.map(map_df)
+from assortment_search import run_assort_search
+from attract_tourism import run_at
+from draw_map import run_draw_map
+from area_search import run_area_search
+from name_search import run_name_search
 
 def main() :
-    df = pd.read_csv('data/tourism.csv')
     
-    draw_map(df[['y', 'x']])
+    choice = st.sidebar.selectbox('검색선택',['국내 관광 명소', 'CCTV 설치와 안전벨 관계'])
 
-    st.subheader('지역검색')
-
-    sido_select = st.selectbox('시·도 검색', df['sido_nm'].unique())
-    sgg = df.loc[df['sido_nm']==sido_select, 'sgg_nm'].unique()
-    sgg_select = st.selectbox('시·구·군 검색', sgg)
-
-
-
-
-
-
-    map = df.loc[df['sido_nm']==sido_select, ['y','x']]
-    draw_map(map)
-
+    if choice == '국내 관광 명소' :
+        run_at()
+    elif choice == 'CCTV 설치와 안전벨 관계' :
+        pass
+        
     
 if __name__ == '__main__' : main()
