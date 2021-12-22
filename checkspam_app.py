@@ -22,7 +22,6 @@ def message_cleaning(Text) :
 
 def run_checkspam() :
     spam_df = pd.read_csv('data/emails.csv')
-
     # training
     # 카운트벡터라이저의 애널라이저 파라미터를 설정해주면 함수를 실행 후 숫자로 변경해준다. 
     vectorizer = CountVectorizer(analyzer=message_cleaning)
@@ -44,10 +43,10 @@ def run_checkspam() :
         X_sample = vectorizer.transform(text)
         X_sample = X_sample.toarray()
         y_pred_sample = classifier.predict(X_sample)
-        # if y_pred_sample[0]==1 :
-        #     print('이전에 스팸으로 확인된 메일과 유사합니다. (정확도 : {})' .format(accuracy_score(y_test, y_pred_sample)))
-        # else :
-        #     print('스팸이 아닙니다. (정확도 : {})' .format(accuracy_score(y_test, y_pred_sample)))
+        if y_pred_sample[0]=='1' :
+            st.write('이전에 스팸으로 확인된 메일과 유사합니다. (정확도 : {}%)' .format(round(accuracy,2)*100))
+        else :
+            st.write('스팸이 아닙니다. (정확도 : {}%)' .format(round(accuracy,2)*100))
 
 
 

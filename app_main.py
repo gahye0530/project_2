@@ -1,11 +1,8 @@
 import streamlit as st
 import pandas as pd
-from assortment_search import run_assort_search
 from attract_tourism import run_at
 from checkspam_app import run_checkspam
-from draw_map import run_draw_map
-from area_search import run_area_search
-from name_search import run_name_search
+
 
 def main() :
     
