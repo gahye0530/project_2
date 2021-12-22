@@ -3,6 +3,8 @@
 import streamlit as st
 import pandas as pd
 import string
+# 워드클라우드
+# pip install streamlit-wordcloud
 import nltk
 nltk.download('stopwords')
 from nltk.corpus import stopwords
@@ -56,6 +58,8 @@ def result_send(text, spam) :
     if st.button('Yes') :
         test = spam_df.append({'text' : text, 'spam' : spam}, ignore_index=True)
         test.to_csv('data/test.csv')
+
+
 
     
 
