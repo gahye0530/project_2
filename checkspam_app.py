@@ -3,8 +3,6 @@
 import streamlit as st
 import pandas as pd
 import string
-# 워드클라우드
-# pip install streamlit-wordcloud
 import nltk
 nltk.download('stopwords')
 from nltk.corpus import stopwords
@@ -60,8 +58,12 @@ def result_send(text, spam) :
         test.to_csv('data/test.csv')
 
 
-
-    
+# 워드클라우드
+# pip install streamlit-wordcloud
+import streamlit_wordcloud
+def word_cloud() :
+    words = spam_df['text'].tolist()
+    streamlit_wordcloud.visualize(words)
 
 
 
