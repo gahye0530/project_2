@@ -38,13 +38,17 @@ def run_checkspam() :
     print('정확도 : {}%' .format(round(accuracy,2)))
 
     st.subheader('Please enter your message')
-    text = st.text_area('', height = 100)
+    text = [st.text_area('', height = 100)]
 
     if (st.button('확인')) & (text != '') :
-        pass
-        # X_sample = vectorizer.transform(text)
-        # X_sample = X_sample.toarray()
-        # print(X_sample.shape)
+        X_sample = vectorizer.transform(text)
+        X_sample = X_sample.toarray()
+        y_pred_sample = classifier.predict(X_sample)
+        # if y_pred_sample[0]==1 :
+        #     print('이전에 스팸으로 확인된 메일과 유사합니다. (정확도 : {})' .format(accuracy_score(y_test, y_pred_sample)))
+        # else :
+        #     print('스팸이 아닙니다. (정확도 : {})' .format(accuracy_score(y_test, y_pred_sample)))
+
 
 
     
