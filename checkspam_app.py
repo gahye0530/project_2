@@ -11,6 +11,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score
+spam_df = pd.read_csv('data/emails.csv')
 
 # 구두점과 불용어 제거하는 작업
 def message_cleaning(Text) :
@@ -21,7 +22,7 @@ def message_cleaning(Text) :
     return test_punc_removed_join_clean
 
 def run_checkspam() :
-    spam_df = pd.read_csv('data/emails.csv')
+    
     # training
     # 카운트벡터라이저의 애널라이저 파라미터를 설정해주면 함수를 실행 후 숫자로 변경해준다. 
     vectorizer = CountVectorizer(analyzer=message_cleaning)
@@ -44,11 +45,17 @@ def run_checkspam() :
         X_sample = X_sample.toarray()
         y_pred_sample = classifier.predict(X_sample)
         if y_pred_sample[0]=='1' :
-            st.write('이전에 스팸으로 확인된 메일과 유사합니다. (정확도 : {}%)' .format(round(accuracy,2)*100))
+            st.write('Similar to messages previously identified as spam. (정확도 : {}%)' .format(round(accuracy,2)*100))
+            result_send(text, 1)
         else :
-            st.write('스팸이 아닙니다. (정확도 : {}%)' .format(round(accuracy,2)*100))
+            st.write('Not Spam (정확도 : {}%)' .format(round(accuracy,2)*100))
+            result_send(text, 0)
 
-
+def result_send(text, spam) :
+    st.subheader('분석결과를 서버로 보내주시겠습니까?')
+    if st.button('Yes') :
+        test = spam_df.append({'text' : text, 'spam' : spam}, ignore_index=True)
+        test.to_csv('data/test.csv')
 
     
 
