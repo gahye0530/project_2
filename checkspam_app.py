@@ -2,6 +2,8 @@
 
 import streamlit as st
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 import string
 import nltk
 nltk.download('stopwords')
@@ -38,7 +40,7 @@ def run_checkspam() :
     print('정확도 : {}%' .format(round(accuracy,2)))
 
     st.subheader('Please enter your message')
-    text = [st.text_area('', height = 100)]
+    text = [st.text_area('','',height = 100, placeholder='Type here...')]
 
     if (st.button('확인')) & (text != '') :
         X_sample = vectorizer.transform(text)
@@ -52,6 +54,7 @@ def run_checkspam() :
             result_send(text, 0)
 
 def result_send(text, spam) :
+    word_cloud()
     st.subheader('분석결과를 서버로 보내주시겠습니까?')
     if st.button('Yes') :
         test = spam_df.append({'text' : text, 'spam' : spam}, ignore_index=True)
@@ -59,11 +62,23 @@ def result_send(text, spam) :
 
 
 # 워드클라우드
-# pip install streamlit-wordcloud
+# pip install wordcloud
 import streamlit_wordcloud
+from wordcloud import WordCloud, STOPWORDS
+from PIL import Image
+
 def word_cloud() :
-    words = spam_df['text'].tolist()
-    streamlit_wordcloud.visualize(words)
+    words_as_one_string = ''.join(spam_df['text'].tolist())
+    img = Image.open('data/spam_img.JPG')
+    img_mask = np.array(img)
+    wc = WordCloud(background_color='white', mask = img_mask, stopwords = my_stopwords)
+    wc.generate(words_as_one_string)
+
+    fig = plt.figure()
+    plt.imshow(wc)
+    plt.axis('off')
+    st.pyplot(fig)
+
 
 
 
