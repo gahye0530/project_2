@@ -9,6 +9,7 @@ import nltk
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 my_stopwords = stopwords.words('english')
+import joblib
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
@@ -24,6 +25,8 @@ def message_cleaning(Text) :
     return test_punc_removed_join_clean
 
 def run_checkspam() :
+    # vectorizer = joblib.load('data/vectorizer.pkl')
+    # classifier = joblib.load('data/classifier1.pkl')
     
     # training
     # 카운트벡터라이저의 애널라이저 파라미터를 설정해주면 함수를 실행 후 숫자로 변경해준다. 
@@ -48,9 +51,11 @@ def run_checkspam() :
         y_pred_sample = classifier.predict(X_sample)
         if y_pred_sample[0]=='1' :
             st.write('Similar to messages previously identified as spam. (정확도 : {}%)' .format(round(accuracy,2)*100))
+            # st.write('Similar to messages previously identified as spam.')
             result_send(text, 1)
         else :
             st.write('Not Spam (정확도 : {}%)' .format(round(accuracy,2)*100))
+            # st.write('Not Spam.')
             result_send(text, 0)
 
 def result_send(text, spam) :
@@ -63,8 +68,7 @@ def result_send(text, spam) :
 
 # 워드클라우드
 # pip install wordcloud
-import streamlit_wordcloud
-from wordcloud import WordCloud, STOPWORDS
+from wordcloud import WordCloud
 from PIL import Image
 
 def word_cloud() :
