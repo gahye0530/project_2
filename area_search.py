@@ -1,4 +1,5 @@
 # 지역별검색
+from altair.vegalite.v4.schema.channels import Order
 import streamlit as st
 import pandas as pd
 from draw_map import run_draw_map
@@ -28,7 +29,9 @@ def run_area_search() :
     st.bar_chart(chart_df)
 
     # altair는 value_counts한 데이터프레임 chart_df가 적합하지 않은것같고..
-    # st.write(alt.Chart(chart_df).mark_bar().encode(
-    #     x = x,
-    #     y = y
-    # ))
+    st.write(alt.Chart(chart_df.reset_index()).mark_bar().encode(
+        x = 'index',
+        y = 'mcate_nm',
+        # color = 'site',
+        # order = alt.Order('site',sort = 'asending')
+    ))
