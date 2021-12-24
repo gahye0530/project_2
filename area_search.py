@@ -29,9 +29,7 @@ def run_area_search() :
     st.bar_chart(chart_df)
 
     # altair는 value_counts한 데이터프레임 chart_df가 적합하지 않은것같고..
-    st.write(alt.Chart(chart_df.reset_index()).mark_bar().encode(
-        x = 'index',
-        y = 'mcate_nm',
-        # color = 'site',
-        # order = alt.Order('site',sort = 'asending')
-    ))
+    # st.write(alt.Chart(chart_df.reset_index()).mark_bar().encode(
+    #     x = 'index',
+    #     y = 'mcate_nm',
+    # ))
