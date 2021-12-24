@@ -20,7 +20,8 @@ def run_area_search(df) :
     # dataframe의 plot을 이용하면 한글이 안먹히고..
     # metaplotlib.pyplot bar차트를 이용해도 한글이 안먹히고.. 정홍근님이 알려준 방법도 안먹히고..
     
-    st.bar_chart(chart_df, width = 700, height = 500, use_container_width=False)
+    # st.bar_chart(chart_df, width = 700, height = 500, use_container_width=False)
+    st.bar_chart(chart_df)
     st.dataframe(df.loc[condition, ['poi_nm','mcate_nm','sido_nm','bemd_nm','ri_nm', 'beonji']])
 
     # altair는 value_counts한 데이터프레임 chart_df가 적합하지 않은것같고..

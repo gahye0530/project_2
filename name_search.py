@@ -14,7 +14,7 @@ def run_name_search(df) :
         run_draw_map(map)
         st.subheader('검색어 <{}>의 관광지 개수 : {}개' .format(name, map.shape[0]))
         chart_df = df.loc[df['poi_nm'].str.contains(name),'sido_nm'].value_counts()
-        st.bar_chart(chart_df, width = 700, height = 500, use_container_width=False)
+        st.bar_chart(chart_df)
     st.dataframe(df_select)
 
 
