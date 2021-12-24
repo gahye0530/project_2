@@ -4,39 +4,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import string
-# import nltk
-# nltk.download('stopwords')
-import joblib
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import accuracy_score
+
 spam_df = pd.read_csv('data/emails.csv')
 
-# 구두점과 불용어 제거하는 작업
-# def message_cleaning(Text) :
-#     test_punc_removed = [char for char in Text if char not in string.punctuation]
-#     # 하나의 문자열로 만듬
-#     test_punc_removed_join = ''.join(test_punc_removed)
-#     test_punc_removed_join_clean  = [word for word in test_punc_removed_join.split() if word.lower() not in my_stopwords]
-#     return test_punc_removed_join_clean
-
 def run_checkspam(vectorizer, classifier, my_stopwords) :
-    # training
-    # 카운트벡터라이저의 애널라이저 파라미터를 설정해주면 함수를 실행 후 숫자로 변경해준다. 
-    # vectorizer = CountVectorizer(analyzer=message_cleaning)
-    # X = vectorizer.fit_transform(spam_df['text'])
-    # X = X.toarray()
-    # y = spam_df['spam']
-    # X_train, X_test, y_train, y_test = train_test_split(X, y)
-    # classifier = MultinomialNB()
-    # classifier.fit(X_train, y_train)
-    # y_pred = classifier.predict(X_test)
-    # # 정확도 산출
-    # accuracy = accuracy_score(y_test, y_pred)
-    # print('정확도 : {}%' .format(round(accuracy,2)))
-
     st.subheader('Please enter your message')
     text = [st.text_area('','',height = 100, placeholder='Type here...')]
 
@@ -46,12 +17,10 @@ def run_checkspam(vectorizer, classifier, my_stopwords) :
         y_pred_sample = classifier.predict(X_sample)
         print(y_pred_sample[0].dtype)
         if y_pred_sample[0]==1 :
-            # st.write('Similar to messages previously identified as spam. (정확도 : {}%)' .format(round(accuracy,2)*100))
             st.write('Similar to messages previously identified as spam.')
             word_cloud(my_stopwords)
             result_send(text, 1)
         else :
-            # st.write('Not Spam (정확도 : {}%)' .format(round(accuracy,2)*100))
             word_cloud(my_stopwords)
             st.write('Not Spam.')
             result_send(text, 0)

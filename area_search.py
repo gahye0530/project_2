@@ -1,18 +1,12 @@
 # 지역별검색
-from altair.vegalite.v4.schema.channels import Order
 import streamlit as st
 import pandas as pd
 from draw_map import run_draw_map
-import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
-import altair as alt
 
 
-def run_area_search() :
+def run_area_search(df) :
 
     st.header('지역별 검색')
-    df = pd.read_csv('data/tourism.csv')
     sido_select = st.selectbox('시·도 검색', df['sido_nm'].unique())
     sgg = df.loc[df['sido_nm']==sido_select, 'sgg_nm'].unique()
     sgg_select = st.selectbox('구·군 검색', sgg)
@@ -26,7 +20,8 @@ def run_area_search() :
     # dataframe의 plot을 이용하면 한글이 안먹히고..
     # metaplotlib.pyplot bar차트를 이용해도 한글이 안먹히고.. 정홍근님이 알려준 방법도 안먹히고..
     
-    st.bar_chart(chart_df)
+    st.bar_chart(chart_df, width = 700, height = 500, use_container_width=False)
+    st.dataframe(df.loc[condition, ['poi_nm','mcate_nm','sido_nm','bemd_nm','ri_nm', 'beonji']])
 
     # altair는 value_counts한 데이터프레임 chart_df가 적합하지 않은것같고..
     # st.write(alt.Chart(chart_df.reset_index()).mark_bar().encode(
