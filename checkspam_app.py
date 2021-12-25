@@ -4,6 +4,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from mysql.connector import errors
+
+from mysql_connect import get_connection
 
 spam_df = pd.read_csv('data/emails.csv')
 
@@ -21,16 +24,31 @@ def run_checkspam(vectorizer, classifier, my_stopwords) :
             word_cloud(my_stopwords)
             result_send(text, 1)
         else :
-            word_cloud(my_stopwords)
             st.write('Not Spam.')
+            word_cloud(my_stopwords)
             result_send(text, 0)
 
 def result_send(text, spam) :
     st.subheader('분석결과를 서버로 보내주시겠습니까?')
     if st.button('Yes') :
-        # test = spam_df.append({'text' : text, 'spam' : spam}, ignore_index=True)
-        print(spam_df.tail(1))
-        # test.to_csv('data/test.csv')
+        try :
+            print('yyyyyeeeeeeesssssssss')
+            connection = get_connection()
+            query = '''insert into new_text(text, spam) values('%s',%s);'''
+            record = (text, spam)
+            cursor = connection.cursor()
+            cursor.execute(cursor, record)
+            connection.commit
+        except errors as e :
+            print('Error', e)
+        finally :
+            if connection.is_connected() :
+                cursor.close()
+                connection.close()
+                st.write('Success')
+
+
+
 
 
 # 워드클라우드
