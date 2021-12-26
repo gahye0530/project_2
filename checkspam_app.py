@@ -14,6 +14,8 @@ from mysql_connect import get_connection
 from wordcloud import WordCloud
 from PIL import Image
 
+spam_df = pd.read_csv('data/emails.csv')
+
 def word_cloud(my_stopwords) :
     words_as_one_string = ''.join(spam_df['text'].tolist())
     img = Image.open('data/spam_img.JPG')
@@ -25,43 +27,47 @@ def word_cloud(my_stopwords) :
     plt.imshow(wc)
     plt.axis('off')
     st.pyplot(fig)
-
-
-spam_df = pd.read_csv('data/emails.csv')
-
+spam=0
 def run_checkspam(vectorizer, classifier, my_stopwords) :
     st.subheader('Please enter your message')
     # 학습을 위해 리스트 형태로 가져온다. 
     text = [st.text_area('','',height = 100, placeholder='Type here...')]
-
     if (st.button('확인')) & (text != '') :
         X_sample = vectorizer.transform(text)
         X_sample = X_sample.toarray()
         y_pred_sample = classifier.predict(X_sample)
-        
+        global spam
         if y_pred_sample[0]==1 :
-            st.write('Similar to messages previously identified as spam.')
+            st.subheader('Similar to messages previously identified as spam.')
+            spam=1
         else :
-            st.write('Not Spam.')
+            st.subheader('Not Spam.')
+            spam=0
+    st.write('')
+    st.write('')
+    st.write('')
+    st.write('')
+    st.write('')
+    # 리스트 형태로 가지고 온 text를 문자열 형태로 result_send함수를 호출한다. 
+    # 텍스트를 apply하거나 버튼하나를 눌러도 새로고침돼서 spam결과를 보내기 어렵다. 
+    result_send(text[0], spam, my_stopwords)
+    
 
-        word_cloud(my_stopwords)
-        # 리스트 형태로 가지고 온 text를 문자열 형태로 result_send함수를 호출한다. 
-        result_send(text[0], 1)
-
-def result_send(text, spam) :
-    # st.subheader('분석결과를 서버로 보내주시겠습니까?')
-    # if st.button('Yes') :
-    try :
-        connection = get_connection()
-        query = '''insert into new_text(text, spam) values(%s,%s);'''
-        record = (text, spam)
-        cursor = connection.cursor()
-        cursor.execute(query, record)
-        connection.commit
-    except errors as e :
-        print('Error', e)
-    finally :
-        if connection.is_connected() :
-            cursor.close()
-            connection.close()
-            st.write('Success')
+def result_send(text, spam, my_stopwords) :
+    st.write('Transmission of analysis results?')
+    if st.button('Yes') :
+        try :
+            connection = get_connection()
+            query ='''insert into new_text(text, spam) values(%s,%s);'''
+            record= (text,spam)
+            cursor = connection.cursor()
+            cursor.execute(query, record)
+            connection.commit()
+        except errors as e :
+            print('Error', e)
+        finally :
+            if connection.is_connected() :
+                cursor.close()
+                connection.close()
+                # st.write('Success')
+                word_cloud(my_stopwords)
