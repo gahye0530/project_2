@@ -19,14 +19,12 @@ def main() :
     # 피클파일로 가지고 오면 정확도 산출이 어렵다. 
     vectorizer = joblib.load('data/vectorizer.pkl')
     classifier = joblib.load('data/classifier1.pkl')
-    choice = st.sidebar.selectbox('검색선택',['국내 관광 명소', 'CCTV 설치와 안전벨 관계', 'SPAM 문자 확인'])
+    choice = st.sidebar.selectbox('검색선택',['국내 관광 명소', 'SPAM 문자 확인'])
 
     if choice == '국내 관광 명소' :
         run_at()
     elif choice == 'SPAM 문자 확인' :
-        run_checkspam(vectorizer, classifier, my_stopwords)
-    elif choice == 'CCTV 설치와 안전벨 관계' :
-        pass
+        run_checkspam(vectorizer, classifier, my_stopwords) 
         
     
 if __name__ == '__main__' : main()

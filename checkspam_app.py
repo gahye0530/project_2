@@ -5,7 +5,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from mysql.connector import errors
-import wordcloud
 
 from mysql_connect import get_connection
 
@@ -31,7 +30,7 @@ spam=0
 def run_checkspam(vectorizer, classifier, my_stopwords) :
     st.subheader('Please enter your message')
     # 학습을 위해 리스트 형태로 가져온다. 
-    text = [st.text_area('','',height = 100, placeholder='Type here...')]
+    text = [st.text_area('','',height = 100, placeholder='Type here in english...')]
     if (st.button('확인')) & (text != '') :
         X_sample = vectorizer.transform(text)
         X_sample = X_sample.toarray()
