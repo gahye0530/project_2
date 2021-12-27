@@ -7,6 +7,7 @@ from name_search import run_name_search
 
 def run_at() :
     df = pd.read_csv('data/tourism.csv')
+    st.write('데이터 출처 : 문화빅데이터 포털사이트 - 국내 지역별 관광명소데이터 (2021)')
     choice = st.radio('',['지역별 검색', '구분별 검색', '관광지명 검색'])
 
     if choice == '지역별 검색' :

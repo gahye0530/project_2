@@ -23,6 +23,7 @@ def main() :
 
     if choice == '국내 관광 명소' :
         run_at()
+        
     elif choice == 'SPAM 문자 확인' :
         run_checkspam(vectorizer, classifier) 
         
