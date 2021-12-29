@@ -33,9 +33,8 @@ def word_cloud() :
     st.pyplot(fig)
 spam=0
 def run_checkspam(vectorizer, classifier) :
-    st.subheader('Please enter your message')
-    # 학습을 위해 리스트 형태로 가져온다. 
-    st.write('scaler : CountVectorizer / modeling : multinomialNB')
+    
+    # 학습을 위해 리스트 형태로 가져온다.
     text = [st.text_area('','',height = 100, placeholder='Type here in english...')]
     if (st.button('확인')) & (text != '') :
         X_sample = vectorizer.transform(text)

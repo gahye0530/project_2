@@ -1,4 +1,5 @@
 from checkspam_app import run_checkspam
+import streamlit as st
 import joblib
 import string
 from nltk.corpus import stopwords
@@ -16,7 +17,9 @@ def main() :
     # 피클파일로 가지고 오면 정확도 산출이 어렵다. 
     vectorizer = joblib.load('data/vectorizer.pkl')
     classifier = joblib.load('data/classifier1.pkl')
-
+    st.subheader('Please enter your message')
+    with st.expander('About...') :
+        st.write('scaler : CountVectorizer / modeling : multinomialNB')
     run_checkspam(vectorizer, classifier) 
         
     
